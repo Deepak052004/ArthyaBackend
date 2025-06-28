@@ -3,10 +3,11 @@ const router = express.Router();
 const Expense = require('../models/Expense');
 
 // Add Expense
-router.post('/add', async (req, res) => {
-  try {
-    const expense = await Expense.create(req.body);
-    res.status(201).json(expense);
+router.post('/', async (req, res) => {
+   try {
+    const expense = new Expense(req.body);
+    const saved = await expense.save();
+    res.status(201).json(saved);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
