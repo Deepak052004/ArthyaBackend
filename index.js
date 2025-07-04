@@ -9,15 +9,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Import Routes
+// Routes
 const expenseRoutes = require('./routes/expenses');
+const subscriptionRoutes = require('./routes/subscriptions');  // ✅ Make sure this line is here
+
 app.use('/api/expenses', expenseRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);  // ✅ And this line
 
 // MongoDB Connect
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB connected'))
   .catch((err) => console.error('❌ MongoDB error:', err));
 
-// Server Start
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
