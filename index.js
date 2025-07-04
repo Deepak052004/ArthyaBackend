@@ -5,18 +5,23 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// ✅ Explicit CORS config for frontend
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 app.use(express.json());
 
-// Routes
+// ✅ Routes
 const expenseRoutes = require('./routes/expenses');
-const subscriptionRoutes = require('./routes/subscriptions');  // ✅ Make sure this line is here
+const subscriptionRoutes = require('./routes/subscriptions');
+const transactionRoutes = require('./routes/transactions');
 
 app.use('/api/expenses', expenseRoutes);
-app.use('/api/subscriptions', subscriptionRoutes);  // ✅ And this line
+app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/transactions', transactionRoutes);
 
-// MongoDB Connect
+// ✅ MongoDB Connect
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB connected'))
   .catch((err) => console.error('❌ MongoDB error:', err));
