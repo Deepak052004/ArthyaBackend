@@ -8,12 +8,18 @@ require('dotenv').config();
 const app = express();
 
 // ✅ Explicit CORS setup for localhost frontend (and preflight support)
+
+
+//app.use(cors(corsOptions));
+//app.options('*', cors(corsOptions)); // Handle preflight requests
 const corsOptions = {
-  origin: 'http://localhost:5173', // frontend URL
+  origin: ['http://localhost:5173', 'https://arthya-webmerged.onrender.com'],
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
+
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Handle preflight requests
 
 // ✅ Middleware
 app.use(express.json());

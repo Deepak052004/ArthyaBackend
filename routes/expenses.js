@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Expense = require('../models/Expense');
 
-// Add Expense
+// ✅ Add Expense
 router.post('/', async (req, res) => {
-   try {
+  try {
     const expense = new Expense(req.body);
     const saved = await expense.save();
     res.status(201).json(saved);
@@ -12,13 +12,14 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// ✅ Get Category-wise Summary
 router.get('/summary/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
     const expenses = await Expense.find({ userId });
 
-    // Group by category
     const categoryTotals = {};
     let totalAmount = 0;
 
@@ -32,17 +33,17 @@ router.get('/summary/:userId', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// ✅ Get Daily Spending Trend
 router.get('/daily/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
     const expenses = await Expense.find({ userId });
 
-    // Group by date (yyyy-mm-dd)
     const dailyTotals = {};
-
     for (const exp of expenses) {
-      const date = exp.timestamp.toISOString().split('T')[0]; // e.g., 2025-06-28
+      const date = exp.timestamp.toISOString().split('T')[0]; // Format: YYYY-MM-DD
       dailyTotals[date] = (dailyTotals[date] || 0) + exp.amount;
     }
 
@@ -52,8 +53,7 @@ router.get('/daily/:userId', async (req, res) => {
   }
 });
 
-
-// Get Expenses by userId
+// ✅ Get All Expenses by userId
 router.get('/:userId', async (req, res) => {
   try {
     const expenses = await Expense.find({ userId: req.params.userId });
